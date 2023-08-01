@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maintenance IQ Training Plan</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.11.5/dist/mermaid.min.js"></script>
+    <style>
+        .button {
+            display: inline-block;
+            font-size: 16px;
+            padding: 10px 20px;
+            color: #ffffff; /* white text */
+            background-color: #007BFF; /* blue background */
+            border: none; /* no border */
+            border-radius: 5px; /* slightly rounded corners */
+            text-decoration: none; /* remove underline if used in a link */
+            transition: background-color 0.3s ease; /* transition effect for hover state */
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3; /* darker blue on hover */
+        }
+
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5em; /* larger text */
+            background: linear-gradient(to right, #FFC0CB, #FF1493); /* gradient from light pink to dark pink */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5em; /* space below the heading */
+        }
+
+        h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2em; /* slightly smaller text than h1 */
+            color: #0056b3; /* slightly darker blue text */
+            margin-bottom: 0.5em; /* space below the heading */
+        }
+
+        .hide{display: none;}
+    </style>
+</head>
+<body>
+      <button id="switch-back" class="button">Overview</button>
+      <button id="start_community_manager" class="button">Click through the Community Manager Path</button>
+      <button id="start_supervisor" class="button">Click through the Maintenance Supervisor Path</button>
+      <button id="start_tech" class="button">Click through the Maintenance Tech Path</button>
+      <button id="next" class="button hide">Next</button>
+      <br />
+      <hr />
+      <br />
+      <h1>Maintenance IQ Training Plan</h1>
+      <h2>Current Step: <span id="current_step">Overview</span></h2>
+      <h3 id="display_path"></h3>
+      <div id="path" class="hide"></div>
+      <br />
+      <hr />
+      <br />
+    <div class="mermaid" id="mermaid-diagram">
+        graph TB
+    Start("Maintenance IQ Training") --> Role{Role}
+    Role -- Community Manager --> ViewWOD[View WO Dashboard]
+    Role -- Maintenance Supervisor --> ViewWOD1[View WO Dashboard]
+    Role -- Maintenance Tech --> ViewWOD2[View WO Dashboard]
+    ViewWOD --> OrganizeWO[Organize and Prioritize WOs]
+    ViewWOD1 --> OrganizeWO1[Organize and Prioritize WOs]
+    ViewWOD2 --> OrganizeWO2[Organize and Prioritize WOs]
+    OrganizeWO --> AssignWO[Assign Work Orders]
+    OrganizeWO1 --> ViewMWO1[View My Work Orders]
+    OrganizeWO2 --> ViewMWO2[View My Work Orders]
+    AssignWO --> AddNotes[Add notes, photos, videos to an IP WO]
+    ViewMWO1 --> AssignWO1[Assign Work Orders]
+    ViewMWO2 --> PickUpWO2[Pick up a WO]
+    AddNotes --> CreateWO[Create Work Order]
+    AssignWO1 --> PickUpWO1[Pick up a WO]
+    PickUpWO2 --> AddNotes2[Add notes, photos, videos to an IP WO]
+    CreateWO --> CreateMR[Create Make Ready]
+    PickUpWO1 --> AddNotes1[Add notes, photos, videos to an IP WO]
+    AddNotes2 --> CreateWO2[Create Work Order]
+    CreateMR --> CompleteWO[Complete a WO]
+    AddNotes1 --> PullUS1[Pull unit status]
+    CreateWO2 --> CreateMR2[Create Make Ready]
+    CompleteWO --> FollowUpWO[Follow Up on WOs]
+    PullUS1 --> CreateWO1[Create Work Order]
+    CreateMR2 --> CompleteWO2[Complete a WO]
+    FollowUpWO --> ViewUTD[View Unit Turn Dashboard]
+    CreateWO1 --> CreateMR1[Create Make Ready]
+    ViewUTD --> AssignUI[Assign unit inspection]
+    CreateMR1 --> CompleteWO1[Complete a WO]
+    AssignUI --> CompleteUI[Complete unit inspection]
+    CompleteWO1 --> FollowUpWO1[Follow Up on WOs]
+    CompleteUI --> ScheduleUTWO[Schedule and complete unit turn WOs]
+    FollowUpWO1 --> ViewUTD1[View Unit Turn Dashboard]
+    ScheduleUTWO --> CreatePO[Create a PO from a WO]
+    ViewUTD1 --> AssignUI1[Assign unit inspection]
+    CreatePO
+    AssignUI1 --> CompleteUI1[Complete unit inspection]
+    CompleteUI1 --> ScheduleUTWO1[Schedule and complete unit turn WOs]
+    ScheduleUTWO1 --> CreatePO1[Create a PO from a WO]
+
+    </div>
+      
+
+    <script>
+    mermaid.initialize({startOnLoad:true});
+
+    var originalDiagram = document.querySelector('.mermaid').textContent;
+
+    var newDiagram = `
+    graph TB
+    Start{View Work Order Dashboard} --> Login[Log into Maintenance IQ]
+    Login --> Navigate[Navigate to the Work Order Dashboard]
+    `;
+
+    var organizePro = `
+    graph TB
+    Start{Organize and Prioritize} --> Login[Log into Maintenance IQ]
+    Login --> Navigate[Navigate to the Work Orders Dashboard]
+    Navigate --> View[View the Work Orders List]
+    View --> Sort[Sort Work Orders]
+    Sort --> Filter[Filter Work Orders]
+
+    `;
+
+    var assignWOR = `
+    graph TB
+    Start{"Assign Work Orders"} --> Step0["Log into Maintenance IQ"]
+    Step0 --> Step1["Navigate to the Work Orders Dashboard"]
+    Step1 --> Step2["Select a Work Order"]
+    Step2 --> Step3["Assign the Work Order"]
+    `;
+
+    var myWors = `
+    graph TB
+    Start(View My Work Orders) --> Step0
+    Step0(Log into Maintenance IQ) --> Step1
+    Step1(Navigate to the Work Orders Dashboard) --> Step2
+    Step2(Access the Filter Feature) --> Step3
+    Step3(Filter by Assigned To) --> Step4
+    Step4(Apply the Filter)
+    `;
+
+    var addPhotos = `
+    graph TB
+    Start{Add Notes, Photos, and Videos to a Work Order} --> Step1[1. Log into Maintenance IQ]
+    Step1 --> Step2[2. Navigate to the Work Orders Dashboard]
+    Step2 --> Step3[3. Select a Work Order]
+    Step3 --> Step4[4. Add a Note]
+    Step4 --> Step5[5. Add Photos]
+    Step5 --> Step6[6. Add Videos]
+    `;
+
+    var pickUpAWor = `
+    graph TB
+    Start{Start} --> Step1[Log into Maintenance IQ]
+    Step1 --> Step2[Navigate to the Work Orders Dashboard]
+    Step2 --> Step3[Select a Work Order]
+    Step3 --> Step4[Assign the Work Order to Yourself]
+    Step4 --> End{End}
+    `;
+
+    var createWor = `
+    graph TD
+    1(Log into Maintenance IQ) --> 2
+    2(Navigate to the Work Orders Dashboard) --> 3
+    3(Start a New Work Order) --> 4
+    4(Fill Out Work Order Details) --> 5
+    5(Save the Work Order)
+    `;
+
+    var pullUnitStatus = `
+    graph LR
+    A[Log into Maintenance IQ] --> B[Navigate to the Work Orders Dashboard]
+    B --> C[Select a Unit]
+    C --> D[View Work Order Progress]
+    `;
+
+    var createMakeRead = `
+    graph TB
+    Start[Log into Maintenance IQ] --> Navigate[Navigate to the Work Orders Dashboard]
+    Navigate --> StartNew[Start a New Work Order]
+    StartNew --> FillDetails[Fill Out Work Order Details]
+    FillDetails --> SelectPriority[Under 'Priority' select 'Make Ready']
+    SelectPriority --> Save[Save the Make Ready]
+    `;
+
+    var completeWor = `
+    graph TD
+    A[Log into Maintenance IQ] --> B[Navigate to the Work Orders Dashboard]
+    B --> C[Select the Work Order]
+    C --> D[Enter Notes]
+    D --> E[Change the Status]
+    E --> F[Save the Work Order]
+    `;
+
+    var followUp = `
+    graph TB
+    1(Log into Maintenance IQ) --> 2
+    2(Navigate to the Work Orders Dashboard) --> 3
+    3(Select the Work Order) --> 4
+    4(Add a Follow-Up Details) --> 5
+    5(Change the Status) --> 6
+    6(Save the Work Order)
+    `;
+
+    var viewUnitTurnDash = `
+    graph TB
+    Start("Start") --> Step1("Log into Maintenance IQ: Start by logging into the Maintenance IQ application using your credentials.")
+    Step1 --> Step2("Navigate to the Unit Turn Dashboard: From the main dashboard of the Maintenance IQ application, navigate to the 'Unit Turn' tab. This is also the default landing page after logging in.")
+    `;
+
+    var assignUnitInspection = `
+    graph TB
+    A[Start] --> B[Log into Maintenance IQ]
+    B --> C[Navigate to the Inspections Section]
+    C --> D[Select an Inspection]
+    D --> E[Find the 'Inspector' Field under 'Assignment']
+    E --> F[Assign the Inspection]
+    F --> G[Save the Inspection]
+    G --> H[End]
+    `;
+
+    var completeUnitInspection = `
+    graph TB
+    A[Start] --> B[Log into Maintenance IQ]
+    B --> C[Navigate to the Inspections Section]
+    C --> D[Select an Inspection]
+    D --> E[Review the Inspection Checklist]
+    E --> F[Change the Status]
+    F --> G[Save the Inspection]
+    G --> H[End]
+    `;
+
+    var conductUnitTurn = `
+    graph TB
+    A[Start] --> B[Log into Maintenance IQ]
+    B --> C[Navigate to the Unit Turn Dashboard]
+    C --> D[Filter Units]
+    D --> E[Use Chart Segments or Action Items]
+    E --> F[Initiate Unit Turn]
+    F --> G[Choose the Unit Turn Process]
+    G --> H[Create Work Orders]
+    H --> I[Assign the newly created work orders]
+    I --> J[Verify completed work orders]
+    J --> K[Finish unit turn]
+    K --> L[Enter completion dates and mark unit as ready]
+    L --> M[End]
+    M --> N[View Unit Turn Milestones]
+    M --> O[View Work Orders]
+    M --> P[View Purchase Orders]
+
+    `;
+
+    var createPO = `
+    graph TB
+    A[Start] --> B[Log into Maintenance IQ]
+    B --> C[Navigate to the Work Order Dashboard]
+    C --> D[Select the Work Order]
+    D --> E[Create a Purchase Order]
+    E --> F[Fill Out Purchase Order Details]
+    F --> G[Save the Purchase Order]
+    G --> H[End]
+    `;
+
+    function switchDiagram(diagram) {
+        // Clear the old diagram
+        document.querySelector('#mermaid-diagram').innerHTML = '';
+        
+        // Create a new div for the diagram
+        var diagramDiv = document.createElement('div');
+        diagramDiv.classList.add('mermaid');
+        document.querySelector('#mermaid-diagram').appendChild(diagramDiv);
+
+        // Render the new diagram
+        mermaid.render('graphDiv', diagram, function(svgGraph) {
+        diagramDiv.innerHTML = svgGraph;
+        });
+    }
+
+    document.querySelector('#switch-back').addEventListener('click', function() {
+        //Home Overview
+        var currentStepHTML = document.getElementById('current_step');
+        currentStepHTML.innerHTML = 'Overview';
+        //show buttons
+        var start_community_manager = document.getElementById('start_community_manager');
+        start_community_manager.classList.remove('hide');
+        var start_supervisor = document.getElementById('start_supervisor');
+        start_supervisor.classList.remove('hide');
+        var start_tech = document.getElementById('start_tech');
+        start_tech.classList.remove('hide');
+        //hide buttons
+        var next = document.getElementById('next');
+        next.classList.add('hide');
+        //clear the path
+        var path = document.getElementById('path');
+        path.innerHTML = '';
+        var display_path = document.getElementById('display_path');
+        display_path.innerHTML = '';
+        //display the diagram
+        switchDiagram(originalDiagram);
+    });
+
+    document.querySelector('#start_community_manager').addEventListener('click', function() {
+        var currentStepHTML = document.getElementById('current_step');
+        currentStepHTML.innerHTML = 'View Work Order Dashboard';
+        //show buttons
+        var next = document.getElementById('next');
+        next.classList.remove('hide');
+        //hide buttons
+        var start_community_manager = document.getElementById('start_community_manager');
+        start_community_manager.classList.add('hide');
+        var start_supervisor = document.getElementById('start_supervisor');
+        start_supervisor.classList.add('hide');
+        var start_tech = document.getElementById('start_tech');
+        start_tech.classList.add('hide');
+        //set the path
+        var path = document.getElementById('path');
+        path.innerHTML = 'cm';
+        var display_path = document.getElementById('display_path');
+        display_path.innerHTML = 'Role: Community Manager';
+        //display the diagram
+        switchDiagram(newDiagram);
+    });
+
+
+    document.querySelector('#start_supervisor').addEventListener('click', function() {
+        var currentStepHTML = document.getElementById('current_step');
+        currentStepHTML.innerHTML = 'View Work Order Dashboard';
+        //show buttons
+        var next = document.getElementById('next');
+        next.classList.remove('hide');
+        //hide buttons
+        var start_community_manager = document.getElementById('start_community_manager');
+        start_community_manager.classList.add('hide');
+        var start_supervisor = document.getElementById('start_supervisor');
+        start_supervisor.classList.add('hide');
+        var start_tech = document.getElementById('start_tech');
+        start_tech.classList.add('hide');
+        //set the path
+        var path = document.getElementById('path');
+        path.innerHTML = 'supervisor';
+        var display_path = document.getElementById('display_path');
+        display_path.innerHTML = 'Role: Maintenance Supervisor';
+        //display the diagram
+        switchDiagram(newDiagram);
+    });
+
+    document.querySelector('#start_tech').addEventListener('click', function() {
+        var currentStepHTML = document.getElementById('current_step');
+        currentStepHTML.innerHTML = 'View Work Order Dashboard';
+        //show buttons
+        var next = document.getElementById('next');
+        next.classList.remove('hide');
+        //hide buttons
+        var start_community_manager = document.getElementById('start_community_manager');
+        start_community_manager.classList.add('hide');
+        var start_supervisor = document.getElementById('start_supervisor');
+        start_supervisor.classList.add('hide');
+        var start_tech = document.getElementById('start_tech');
+        start_tech.classList.add('hide');
+        //set the path
+        var path = document.getElementById('path');
+        path.innerHTML = 'tech';
+        var display_path = document.getElementById('display_path');
+        display_path.innerHTML = 'Role: Maintenance Tech';
+        //display the diagram
+        switchDiagram(newDiagram);
+    });
+
+    document.querySelector('#next').addEventListener('click', function() {
+        var currentStepHTML = document.getElementById('current_step');
+        var path = document.getElementById('path').innerHTML;
+        switch (currentStepHTML.innerHTML) {
+            case 'View Work Order Dashboard':
+                currentStepHTML.innerHTML = 'Organize and Prioritize Work Orders';
+                switchDiagram(organizePro);
+                break;
+            case 'Organize and Prioritize Work Orders':
+                if(path == 'cm'){
+                    currentStepHTML.innerHTML = 'Assign Work Orders';
+                    switchDiagram(assignWOR);
+                }else{
+                    currentStepHTML.innerHTML = 'View My Work Orders';
+                    switchDiagram(myWors);
+                }
+                break;
+            case 'View My Work Orders':
+                if(path == 'tech'){
+                    currentStepHTML.innerHTML = 'Pick Up a Work Order';
+                    switchDiagram(pickUpAWor);
+                }else{
+                    currentStepHTML.innerHTML = 'Assign Work Orders';
+                    switchDiagram(assignWOR);
+                }
+                break;
+            case 'Assign Work Orders':
+                if(path == 'cm'){
+                    currentStepHTML.innerHTML = 'Add notes, photos or videos to an In Process Work Order';
+                    switchDiagram(addPhotos);
+                }else{
+                    currentStepHTML.innerHTML = 'Pick Up a Work Order';
+                    switchDiagram(pickUpAWor);
+                }
+                break;
+            case 'Pick Up a Work Order':
+                    currentStepHTML.innerHTML = 'Add notes, photos or videos to an In Process Work Order';
+                    switchDiagram(addPhotos);
+                break;
+            case 'Add notes, photos or videos to an In Process Work Order':
+                if(path == 'cm'){
+                    currentStepHTML.innerHTML = 'Create a Work Order';
+                    switchDiagram(createWor);
+                }else if(path == 'tech'){
+                    currentStepHTML.innerHTML = 'Create a Work Order';
+                    switchDiagram(createWor);
+                }else{
+                    currentStepHTML.innerHTML = 'Pull Unit Status';
+                    switchDiagram(pullUnitStatus);
+                }
+                break;
+            case 'Create a Work Order':
+                    currentStepHTML.innerHTML = 'Create a Make Ready';
+                    switchDiagram(createMakeRead);
+                break;
+            case 'Create a Make Ready':
+                    currentStepHTML.innerHTML = 'Complete a Work Order';
+                    switchDiagram(completeWor);
+                break;
+            case 'Complete a Work Order':
+                    if(path == 'cm' || path == 'supervisor'){
+                        currentStepHTML.innerHTML = 'Follow Up on Work Orders';
+                        switchDiagram(followUp);
+                    }else{
+                        //send techs back home
+                        location.reload();
+                    }
+                break;
+            case 'Follow Up on Work Orders':
+                    if(path == 'cm' || path == 'supervisor'){
+                        currentStepHTML.innerHTML = 'View Unit Turn Dashboard';
+                        switchDiagram(viewUnitTurnDash);
+                    }
+                break;
+            case 'View Unit Turn Dashboard':
+                    if(path == 'cm' || path == 'supervisor'){
+                        currentStepHTML.innerHTML = 'Assign Unit Inspection';
+                        switchDiagram(assignUnitInspection);
+                    }
+                break;
+            case 'Assign Unit Inspection':
+                    if(path == 'cm' || path == 'supervisor'){
+                        currentStepHTML.innerHTML = 'Complete Unit Inspection';
+                        switchDiagram(completeUnitInspection);
+                    }
+                break;
+            case 'Complete Unit Inspection':
+                    if(path == 'cm' || path == 'supervisor'){
+                        currentStepHTML.innerHTML = 'Schedule Unit Turn Work Orders';
+                        switchDiagram(conductUnitTurn);
+                    }
+                break;
+            case 'Schedule Unit Turn Work Orders':
+                    if(path == 'cm' || path == 'supervisor'){
+                        currentStepHTML.innerHTML = 'Create a Purchase Order';
+                        switchDiagram(createPO);
+                    }
+                break;
+            case 'Create a Purchase Order':
+                //all done 
+                location.reload();
+                break;
+        
+            default:
+                //go home
+                location.reload();
+                break;
+        }
+    });
+    </script>
+</body>
+</html>
